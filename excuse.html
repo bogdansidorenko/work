@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Генератор случайных отмазок</title>
+<style>
+  :root {
+    --bg: #1b1d2a;
+    --card: #262a3d;
+    --accent: #6c8cff;
+    --gold: #ffce54;
+    --text: #e8eaf2;
+    --muted: #9aa0b4;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .app {
+    width: 100%;
+    max-width: 480px;
+    text-align: center;
+  }
+  h1 {
+    font-size: 1.6rem;
+    margin-bottom: 6px;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+  }
+  .excuse {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 28px 22px;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s ease;
+  }
+  .excuse.legendary {
+    background: linear-gradient(135deg, #3a2f1a, #4a3b1f);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-style: italic;
+  }
+  .legendary-label {
+    display: block;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+  }
+  .pop { transform: scale(1.04); }
+  .buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+  }
+  button {
+    flex: 1;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 16px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s ease, transform 0.1s ease;
+  }
+  button:active { transform: scale(0.97); }
+  .btn-generate { background: var(--accent); color: #fff; }
+  .btn-copy { background: #353a52; color: var(--text); }
+  .btn-copy.copied { background: #3ba55d; color: #fff; }
+  .hint {
+    margin-top: 18px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    min-height: 1em;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <h1>Генератор случайных отмазок 😏</h1>
+  <p class="subtitle">Нажми кнопку — и получи готовую отмазку на любой случай.</p>
+
+  <div class="excuse" id="excuse">Нажми «Сгенерировать», чтобы начать</div>
+
+  <div class="buttons">
+    <button class="btn-generate" id="generateBtn">🎲 Сгенерировать</button>
+    <button class="btn-copy" id="copyBtn">📋 Скопировать</button>
+  </div>
+
+  <p class="hint" id="hint"></p>
+</div>
+
+<script>
+  const EXCUSES = [
+    "Я в лесу",
+    "Мне гулять с собакой",
+    "Завтра рано вставать, поэтому сегодня нельзя веселиться",
+    "Рубрика рандомный слив",
+    "Послезавтра надо работать, вдруг опоздаю",
+    "Нечего надеть",
+    "Рубрика молчаливый слив",
+    "Кот в мешке - сгенерируй сам",
+    "Нужно немного насилия",
+    "Татарские посиделки",
+  ];
+
+  const LEGENDARY_EXCUSE =
+    "Я не пришёл, потому что в этот момент спасал котёнка, " +
+    "доставлял пиццу бабушке и одновременно изобретал " +
+    "лекарство от понедельников.";
+
+  const LEGENDARY_CHANCE = 0.05;
+
+  const excuseEl = document.getElementById("excuse");
+  const generateBtn = document.getElementById("generateBtn");
+  const copyBtn = document.getElementById("copyBtn");
+  const hintEl = document.getElementById("hint");
+
+  let currentExcuse = "";
+
+  function generateExcuse() {
+    if (Math.random() < LEGENDARY_CHANCE) {
+      return { text: LEGENDARY_EXCUSE, legendary: true };
+    }
+    const text = EXCUSES[Math.floor(Math.random() * EXCUSES.length)];
+    return { text, legendary: false };
+  }
+
+  function showExcuse() {
+    const { text, legendary } = generateExcuse();
+    currentExcuse = text;
+
+    if (legendary) {
+      excuseEl.classList.add("legendary");
+      excuseEl.innerHTML =
+        '<span class="legendary-label">✨🏆 ЛЕГЕНДАРНАЯ ОТМАЗКА 🏆✨</span>' + text;
+    } else {
+      excuseEl.classList.remove("legendary");
+      excuseEl.textContent = text;
+    }
+
+    excuseEl.classList.remove("pop");
+    void excuseEl.offsetWidth;
+    excuseEl.classList.add("pop");
+
+    copyBtn.classList.remove("copied");
+    copyBtn.textContent = "📋 Скопировать";
+    hintEl.textContent = "";
+  }
+
+  async function copyExcuse() {
+    if (!currentExcuse) {
+      hintEl.textContent = "Сначала сгенерируй отмазку";
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(currentExcuse);
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = currentExcuse;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+    }
+    copyBtn.classList.add("copied");
+    copyBtn.textContent = "✅ Скопировано";
+    hintEl.textContent = "Отмазка скопирована в буфер обмена";
+  }
+
+  generateBtn.addEventListener("click", showExcuse);
+  copyBtn.addEventListener("click", copyExcuse);
+</script>
+</body>
+</html>
