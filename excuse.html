@@ -3,111 +3,360 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Генератор случайных отмазок</title>
+<title>Генератор отмазок · Татарстан</title>
 <style>
   :root {
-    --bg: #1b1d2a;
-    --card: #262a3d;
-    --accent: #6c8cff;
-    --gold: #ffce54;
-    --text: #e8eaf2;
-    --muted: #9aa0b4;
+    --bg: #fbfbfd;
+    --ink: #1d1d1f;
+    --muted: #6e6e73;
+    --green: #1a8f4e;   /* флаг Татарстана */
+    --red: #e02f44;     /* флаг Татарстана */
+    --gold: #c99a2e;
+    --card: #ffffff;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
   body {
-    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+      "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
     background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  /* ===== Навигация (как у Apple — тонкая, с размытием) ===== */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    gap: 8px;
+    height: 48px;
+    background: rgba(251, 251, 253, 0.8);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
   }
-  .app {
-    width: 100%;
-    max-width: 480px;
+  nav .leopard { font-size: 1.1rem; }
+
+  /* ===== Геро ===== */
+  header {
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
+    padding: 40px 22px;
+    position: relative;
+  }
+  /* полоска цветов флага Татарстана */
+  .flag-bar {
+    width: 88px;
+    height: 6px;
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.1s ease forwards;
+  }
+  .flag-bar i { flex: 1; display: block; }
+  .flag-bar .g { background: var(--green); }
+  .flag-bar .w { background: #ffffff; flex: 0 0 12%; }
+  .flag-bar .r { background: var(--red); }
+
+  .eyebrow {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--green);
+    letter-spacing: 0.02em;
+    margin-bottom: 10px;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.2s ease forwards;
   }
   h1 {
-    font-size: 1.6rem;
-    margin-bottom: 6px;
+    font-size: clamp(2.8rem, 8vw, 5.5rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    background: linear-gradient(120deg, var(--green), var(--ink) 55%, var(--red));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    opacity: 0;
+    animation: fadeUp 1s 0.32s ease forwards;
   }
-  .subtitle {
+  .lead {
+    margin-top: 20px;
+    max-width: 560px;
+    font-size: clamp(1.1rem, 2.4vw, 1.5rem);
     color: var(--muted);
-    font-size: 0.95rem;
-    margin-bottom: 24px;
+    line-height: 1.4;
+    opacity: 0;
+    animation: fadeUp 1s 0.46s ease forwards;
+  }
+  .scroll-cue {
+    margin-top: 52px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    opacity: 0;
+    animation: fadeUp 1s 0.6s ease forwards;
+  }
+  .scroll-cue span {
+    display: block;
+    font-size: 1.3rem;
+    margin-top: 4px;
+    animation: bob 1.8s ease-in-out infinite;
+  }
+
+  /* плавающие тюльпаны на фоне */
+  .floaters { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+  .floaters .tulip-svg {
+    position: absolute;
+    width: 34px;
+    opacity: 0.12;
+    animation: drift 14s ease-in-out infinite;
+  }
+
+  /* ===== Секции ===== */
+  section {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 90px 22px;
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(48px);
+    transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+
+  h2 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-align: center;
+    line-height: 1.1;
+  }
+  .section-sub {
+    text-align: center;
+    color: var(--muted);
+    font-size: 1.1rem;
+    margin-top: 14px;
+    margin-bottom: 40px;
+  }
+
+  /* ===== Карточка генератора ===== */
+  .card {
+    background: var(--card);
+    border-radius: 30px;
+    padding: 44px 32px;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.1);
+    text-align: center;
   }
   .excuse {
-    background: var(--card);
-    border-radius: 16px;
-    padding: 28px 22px;
-    font-size: 1.25rem;
-    line-height: 1.5;
-    min-height: 120px;
+    font-size: clamp(1.3rem, 3.6vw, 1.9rem);
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: -0.01em;
+    min-height: 150px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    transition: transform 0.15s ease;
+    transition: opacity 0.22s ease, transform 0.22s ease;
   }
+  .excuse.placeholder { color: var(--muted); font-weight: 500; }
+
   .excuse.legendary {
-    background: linear-gradient(135deg, #3a2f1a, #4a3b1f);
-    border: 1px solid var(--gold);
-    color: var(--gold);
-    font-style: italic;
+    background: linear-gradient(135deg, #1d1d1f, #2c2616);
+    border-radius: 22px;
+    padding: 30px 22px;
+    margin: -6px 0;
+    color: #f4d98a;
+    position: relative;
+    overflow: hidden;
   }
-  .legendary-label {
-    display: block;
-    font-style: normal;
+  .excuse.legendary::after {
+    content: "";
+    position: absolute;
+    top: 0; left: -60%;
+    width: 50%; height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,0.35), transparent);
+    animation: shimmer 2.6s ease-in-out infinite;
+  }
+  .legend-label {
+    font-size: 0.82rem;
     font-weight: 700;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
+    letter-spacing: 0.14em;
+    color: var(--gold);
+    margin-bottom: 14px;
   }
-  .pop { transform: scale(1.04); }
+
   .buttons {
     display: flex;
     gap: 12px;
-    margin-top: 20px;
+    margin-top: 30px;
+    flex-wrap: wrap;
   }
   button {
     flex: 1;
+    min-width: 160px;
     border: none;
-    border-radius: 12px;
-    padding: 14px 16px;
-    font-size: 1rem;
+    border-radius: 980px;
+    padding: 15px 22px;
+    font-size: 1.02rem;
     font-weight: 600;
+    font-family: inherit;
     cursor: pointer;
-    transition: opacity 0.15s ease, transform 0.1s ease;
+    transition: transform 0.12s ease, box-shadow 0.2s ease, background 0.2s ease;
   }
-  button:active { transform: scale(0.97); }
-  .btn-generate { background: var(--accent); color: #fff; }
-  .btn-copy { background: #353a52; color: var(--text); }
-  .btn-copy.copied { background: #3ba55d; color: #fff; }
-  .hint {
-    margin-top: 18px;
-    font-size: 0.8rem;
+  button:active { transform: scale(0.96); }
+  .btn-generate {
+    background: var(--green);
+    color: #fff;
+    box-shadow: 0 8px 20px rgba(26, 143, 78, 0.32);
+  }
+  .btn-generate:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(26,143,78,0.4); }
+  .btn-copy { background: #f0f0f2; color: var(--ink); }
+  .btn-copy:hover { background: #e7e7ea; transform: translateY(-2px); }
+  .btn-copy.copied { background: var(--green); color: #fff; }
+
+  .hint { margin-top: 16px; font-size: 0.86rem; color: var(--muted); min-height: 1.1em; }
+
+  /* ===== Блок про легендарные ===== */
+  .legend-block { text-align: center; }
+  .big-stat {
+    font-size: clamp(3.5rem, 12vw, 7rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    background: linear-gradient(120deg, var(--gold), var(--red));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* ===== Орнаментальный разделитель из тюльпанов ===== */
+  .ornament {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    padding: 30px 0;
+  }
+  .ornament .tulip-svg { width: 30px; }
+  .ornament .tulip-svg:nth-child(even) { transform: rotate(180deg) translateY(-4px); }
+
+  footer {
+    text-align: center;
+    padding: 50px 22px 70px;
     color: var(--muted);
-    min-height: 1em;
+    font-size: 0.86rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+  }
+  footer .flag-bar { margin: 0 auto 18px; animation: none; opacity: 1; }
+
+  /* падающие тюльпаны при легендарной отмазке */
+  .tulip-fall {
+    position: fixed;
+    top: -40px;
+    font-size: 26px;
+    pointer-events: none;
+    z-index: 999;
+    animation: fall 2.6s ease-in forwards;
+  }
+
+  /* ===== Анимации ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(34px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+  @keyframes drift {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-26px) rotate(8deg); }
+  }
+  @keyframes shimmer {
+    0% { left: -60%; }
+    60%, 100% { left: 130%; }
+  }
+  @keyframes pop {
+    0% { transform: scale(0.94); }
+    60% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+  }
+  @keyframes fall {
+    to { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, ::after, ::before { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
   }
 </style>
 </head>
 <body>
-<div class="app">
-  <h1>Генератор случайных отмазок 😏</h1>
-  <p class="subtitle">Нажми кнопку — и получи готовую отмазку на любой случай.</p>
 
-  <div class="excuse" id="excuse">Нажми «Сгенерировать», чтобы начать</div>
+<nav>
+  <span class="leopard">🐆</span>
+  <span>Генератор отмазок</span>
+</nav>
 
-  <div class="buttons">
-    <button class="btn-generate" id="generateBtn">🎲 Сгенерировать</button>
-    <button class="btn-copy" id="copyBtn">📋 Скопировать</button>
+<header>
+  <div class="floaters" id="floaters"></div>
+
+  <div class="flag-bar"><i class="g"></i><i class="w"></i><i class="r"></i></div>
+  <p class="eyebrow">Татарстан · Казань</p>
+  <h1>Отмазка<br>на любой случай</h1>
+  <p class="lead">
+    Одно нажатие — и готовый повод не приходить.
+    А с удачей выпадет легендарная отмазка 🌷
+  </p>
+  <p class="scroll-cue">Прокрути вниз<span>⌄</span></p>
+</header>
+
+<section class="reveal">
+  <h2>Сгенерируй отмазку</h2>
+  <p class="section-sub">Жми кнопку столько раз, сколько нужно убедительности.</p>
+
+  <div class="card">
+    <div class="excuse placeholder" id="excuse">Нажми «Сгенерировать», чтобы начать 🌷</div>
+    <div class="buttons">
+      <button class="btn-generate" id="generateBtn">🎲 Сгенерировать</button>
+      <button class="btn-copy" id="copyBtn">📋 Скопировать</button>
+    </div>
+    <p class="hint" id="hint"></p>
   </div>
+</section>
 
-  <p class="hint" id="hint"></p>
-</div>
+<div class="ornament reveal" id="ornament"></div>
+
+<section class="reveal">
+  <div class="legend-block">
+    <div class="big-stat" id="legendCount">7</div>
+    <h2>Легендарных отмазок</h2>
+    <p class="section-sub">
+      Каждый бросок — это шанс ≈5% получить особую, эпическую отмазку.
+      Они длиннее, наглее и оформлены золотом. Поймать такую — редкая удача.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="flag-bar"><i class="g"></i><i class="w"></i><i class="r"></i></div>
+  Генератор случайных отмазок · сделано с 🌷 в Татарстане
+</footer>
 
 <script>
+  /* ===== Данные ===== */
   const EXCUSES = [
     "Я в лесу",
     "Мне гулять с собакой",
@@ -121,23 +370,48 @@
     "Татарские посиделки",
   ];
 
-  const LEGENDARY_EXCUSE =
+  const LEGENDARY_EXCUSES = [
     "Я не пришёл, потому что в этот момент спасал котёнка, " +
-    "доставлял пиццу бабушке и одновременно изобретал " +
-    "лекарство от понедельников.";
+      "доставлял пиццу бабушке и одновременно изобретал лекарство от понедельников.",
+    "Меня позвали почётным гостем на тайный съезд котов — " +
+      "отказаться было невозможно, это вопрос чести.",
+    "Прости, я застрял в очереди за чак-чаком, и она оказалась " +
+      "длиннее Великой Татарской стены.",
+    "Меня похитили инопланетяне, но узнав, что у меня нет конкретных " +
+      "планов, разочарованно вернули обратно.",
+    "Я медитировал так глубоко, что достиг просветления и теперь " +
+      "физически не могу выйти из дома до следующего вторника.",
+    "Ак Барс лично попросил меня охранять Казань этой ночью — " +
+      "такому барсу не отказывают.",
+    "Я открыл портал в параллельную вселенную, а там как раз " +
+      "начинались более важные татарские посиделки.",
+  ];
 
   const LEGENDARY_CHANCE = 0.05;
 
+  /* ===== SVG-тюльпан (татарский национальный символ) ===== */
+  const TULIP = `<svg class="tulip-svg" viewBox="0 0 40 56" fill="none"
+      xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 5 C13 15 13 23 20 30 C27 23 27 15 20 5Z" fill="#e02f44"/>
+      <path d="M20 30 C15 21 7 17 5 22 C7 31 14 33 20 30Z" fill="#1a8f4e"/>
+      <path d="M20 30 C25 21 33 17 35 22 C33 31 26 33 20 30Z" fill="#1a8f4e"/>
+      <path d="M20 30 L20 52" stroke="#1a8f4e" stroke-width="2.4"
+        stroke-linecap="round"/>
+      <path d="M20 46 C14 44 10 38 12 33 C18 35 20 41 20 46Z" fill="#1a8f4e"/>
+    </svg>`;
+
+  /* ===== Генерация ===== */
+  let currentExcuse = "";
   const excuseEl = document.getElementById("excuse");
-  const generateBtn = document.getElementById("generateBtn");
   const copyBtn = document.getElementById("copyBtn");
   const hintEl = document.getElementById("hint");
 
-  let currentExcuse = "";
-
   function generateExcuse() {
     if (Math.random() < LEGENDARY_CHANCE) {
-      return { text: LEGENDARY_EXCUSE, legendary: true };
+      const text = LEGENDARY_EXCUSES[
+        Math.floor(Math.random() * LEGENDARY_EXCUSES.length)
+      ];
+      return { text, legendary: true };
     }
     const text = EXCUSES[Math.floor(Math.random() * EXCUSES.length)];
     return { text, legendary: false };
@@ -147,22 +421,29 @@
     const { text, legendary } = generateExcuse();
     currentExcuse = text;
 
-    if (legendary) {
-      excuseEl.classList.add("legendary");
-      excuseEl.innerHTML =
-        '<span class="legendary-label">✨🏆 ЛЕГЕНДАРНАЯ ОТМАЗКА 🏆✨</span>' + text;
-    } else {
-      excuseEl.classList.remove("legendary");
-      excuseEl.textContent = text;
-    }
+    excuseEl.style.opacity = "0";
+    excuseEl.style.transform = "translateY(12px)";
 
-    excuseEl.classList.remove("pop");
-    void excuseEl.offsetWidth;
-    excuseEl.classList.add("pop");
+    setTimeout(() => {
+      excuseEl.classList.remove("placeholder");
+      if (legendary) {
+        excuseEl.classList.add("legendary");
+        excuseEl.innerHTML =
+          '<span class="legend-label">🏆 ЛЕГЕНДАРНАЯ ОТМАЗКА 🏆</span>' + text;
+        rainTulips();
+      } else {
+        excuseEl.classList.remove("legendary");
+        excuseEl.textContent = text;
+      }
+      excuseEl.style.opacity = "1";
+      excuseEl.style.transform = "translateY(0)";
+      excuseEl.style.animation = "pop 0.4s ease";
+      setTimeout(() => (excuseEl.style.animation = ""), 400);
 
-    copyBtn.classList.remove("copied");
-    copyBtn.textContent = "📋 Скопировать";
-    hintEl.textContent = "";
+      copyBtn.classList.remove("copied");
+      copyBtn.textContent = "📋 Скопировать";
+      hintEl.textContent = "";
+    }, 200);
   }
 
   async function copyExcuse() {
@@ -185,8 +466,54 @@
     hintEl.textContent = "Отмазка скопирована в буфер обмена";
   }
 
-  generateBtn.addEventListener("click", showExcuse);
+  /* падающие тюльпаны при легендарной отмазке */
+  function rainTulips() {
+    for (let i = 0; i < 16; i++) {
+      const t = document.createElement("div");
+      t.className = "tulip-fall";
+      t.textContent = "🌷";
+      t.style.left = Math.random() * 100 + "vw";
+      t.style.animationDelay = Math.random() * 0.6 + "s";
+      t.style.fontSize = 18 + Math.random() * 22 + "px";
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 3400);
+    }
+  }
+
+  document.getElementById("generateBtn").addEventListener("click", showExcuse);
   copyBtn.addEventListener("click", copyExcuse);
+
+  /* ===== Орнамент из тюльпанов ===== */
+  document.getElementById("ornament").innerHTML = TULIP.repeat(7);
+
+  /* ===== Плавающие тюльпаны на фоне ===== */
+  const floaters = document.getElementById("floaters");
+  for (let i = 0; i < 7; i++) {
+    floaters.insertAdjacentHTML("beforeend", TULIP);
+  }
+  floaters.querySelectorAll(".tulip-svg").forEach((el) => {
+    el.style.left = Math.random() * 90 + "%";
+    el.style.top = Math.random() * 85 + "%";
+    el.style.animationDelay = Math.random() * 7 + "s";
+    el.style.width = 26 + Math.random() * 30 + "px";
+  });
+
+  /* ===== Счётчик легендарных ===== */
+  document.getElementById("legendCount").textContent = LEGENDARY_EXCUSES.length;
+
+  /* ===== Появление секций при прокрутке ===== */
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add("in");
+          io.unobserve(e.target);
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
 </script>
 </body>
 </html>
