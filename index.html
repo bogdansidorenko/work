@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Адаптивность под мобильные устройства -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Генератор случайных отмазок</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <h1 class="title">Генератор случайных отмазок</h1>
+    <p class="subtitle">Нажми на кнопку — и получи спасительную отмазку 😏</p>
+
+    <!-- Выбор категории отмазки -->
+    <div class="controls">
+      <label for="category" class="category-label">Категория:</label>
+      <select id="category" class="category-select">
+        <option value="any">Любая</option>
+        <option value="work">Работа</option>
+        <option value="study">Учёба</option>
+        <option value="friends">Друзья</option>
+        <option value="relationship">Отношения</option>
+        <option value="sport">Спорт</option>
+        <option value="universal">Универсальные</option>
+      </select>
+    </div>
+
+    <!-- Карточка, в которой показывается отмазка -->
+    <section id="card" class="card">
+      <p id="excuse" class="excuse">Здесь появится твоя отмазка...</p>
+    </section>
+
+    <!-- Кнопки управления -->
+    <div class="buttons">
+      <button id="generateBtn" class="btn btn-primary">Сгенерировать отмазку</button>
+      <button id="copyBtn" class="btn btn-secondary">Скопировать отмазку</button>
+    </div>
+
+    <p id="toast" class="toast" aria-live="polite"></p>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

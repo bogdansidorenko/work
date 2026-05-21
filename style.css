@@ -1,0 +1,201 @@
+/* ===== Базовые сбросы и переменные ===== */
+:root {
+  --bg: #f4f6fb;
+  --card-bg: #ffffff;
+  --accent: #6c5ce7;
+  --accent-hover: #5a4bd4;
+  --secondary: #00b894;
+  --secondary-hover: #019d7f;
+  --text: #2d3436;
+  --legendary: #ffb300;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* ===== Контейнер приложения ===== */
+.app {
+  background: var(--card-bg);
+  width: 100%;
+  max-width: 520px;
+  padding: 32px 28px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.title {
+  font-size: 1.6rem;
+  margin-bottom: 8px;
+  color: var(--accent);
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: #636e72;
+  margin-bottom: 20px;
+}
+
+/* ===== Выбор категории ===== */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.category-label {
+  font-weight: 600;
+}
+
+.category-select {
+  padding: 8px 12px;
+  border: 2px solid var(--accent);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  background: #fff;
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* ===== Карточка с отмазкой ===== */
+.card {
+  background: #f0f1ff;
+  border-radius: 16px;
+  padding: 28px 20px;
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.excuse {
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* ===== Анимация появления отмазки ===== */
+.fade-in {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== Особый стиль для легендарной отмазки ===== */
+.card.legendary {
+  background: linear-gradient(135deg, #fff3c4, #ffd86b);
+  box-shadow: 0 0 24px rgba(255, 179, 0, 0.6);
+}
+
+.excuse.legendary {
+  color: #b8860b;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.legendary-badge {
+  display: block;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  color: var(--legendary);
+  text-transform: uppercase;
+}
+
+/* ===== Кнопки ===== */
+.buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn-secondary {
+  background: var(--secondary);
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background: var(--secondary-hover);
+}
+
+/* ===== Всплывающее уведомление ===== */
+.toast {
+  margin-top: 14px;
+  min-height: 20px;
+  font-size: 0.9rem;
+  color: var(--secondary);
+  font-weight: 600;
+}
+
+/* ===== Адаптивность для телефонов ===== */
+@media (max-width: 480px) {
+  .app {
+    padding: 24px 18px;
+  }
+
+  .title {
+    font-size: 1.35rem;
+  }
+
+  .excuse {
+    font-size: 1.15rem;
+  }
+
+  .buttons {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}
