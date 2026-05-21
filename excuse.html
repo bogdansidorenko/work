@@ -337,6 +337,9 @@
     "Кот в мешке - сгенерируй сам",
     "Нужно немного насилия",
     "Татарские посиделки",
+    "Я стесняюсь",
+    "Буду делать тоже самое но одна",
+    "Аузене яп",
   ];
 
   const LEGENDARY_EXCUSES = [
@@ -375,7 +378,7 @@
   const copyBtn = document.getElementById("copyBtn");
   const hintEl = document.getElementById("hint");
 
-  function generateExcuse() {
+  function rollExcuse() {
     if (Math.random() < LEGENDARY_CHANCE) {
       const text = LEGENDARY_EXCUSES[
         Math.floor(Math.random() * LEGENDARY_EXCUSES.length)
@@ -384,6 +387,15 @@
     }
     const text = EXCUSES[Math.floor(Math.random() * EXCUSES.length)];
     return { text, legendary: false };
+  }
+
+  /* не повторяем ту же отмазку, что показана сейчас */
+  function generateExcuse() {
+    let result;
+    do {
+      result = rollExcuse();
+    } while (result.text === currentExcuse);
+    return result;
   }
 
   function showExcuse() {
