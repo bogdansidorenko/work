@@ -50,30 +50,6 @@ body {
   margin-bottom: 20px;
 }
 
-/* ===== Выбор категории ===== */
-.controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-
-.category-label {
-  font-weight: 600;
-}
-
-.category-select {
-  padding: 8px 12px;
-  border: 2px solid var(--accent);
-  border-radius: 10px;
-  font-size: 0.95rem;
-  background: #fff;
-  color: var(--text);
-  cursor: pointer;
-}
-
 /* ===== Карточка с отмазкой ===== */
 .card {
   background: #f0f1ff;
